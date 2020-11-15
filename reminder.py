@@ -49,8 +49,9 @@ def are_reminders_set():
 #     frame.mainloop()
 
 #Function which sends a notification after taking input(as a string) the notification to send
-def send_notification(notificate):
+def send_notification(notificate,message):
     notification.notify(title=notificate,
+                        message = message,
                         timeout = 50)
 
 def send_notification_multiple(notificate,notificate2):
@@ -87,7 +88,7 @@ def set_reminders():
         int(input("How many minutes of interval do you want between \"exercise eyes\" reminders?\n")),
         int(input("How many minutes of interval do you want between \"move around\" reminders?\n"))]
     with open("reminderapp_file2.txt","w+") as file:
-        file.write(reminders[0],"\n",reminders[1],"\n",reminders[2])
+        file.write(str(reminders[0]) +"\n" + str(reminders[1]) + "\n" + str(reminders[2]))
 
 
 # ______________________________________________________________
@@ -98,22 +99,28 @@ if added_to_startup() == False:
 if are_reminders_set() == False:
     set_reminders()
 while True:
-    next_reminder()
-    reminders_sent=0
-    while reminders_sent is not 3:
-        if is_time()==True:
-            #The following is the entire process of sending the reminder
-            index = times.index(int(datetime.datetime.now().strftime("%M")))
-            if index == 0:
-                remind = "Drink water"
-            elif index == 1:
-                remind = "Rest your eyes now"
+    if datetime.datetime.now().strftime("%S") == "00":
+        next_reminder(int(datetime.datetime.now().strftime("%M")))
+        reminders_sent=0
+        while reminders_sent is not 3:
+            if is_time()==True:
+                #The following is the entire process of sending the reminder
+                index = times.index(int(datetime.datetime.now().strftime("%M")))
+                remind = ""
+                message = ""
+                if index == 0:
+                    remind = "Drink water"
+                    message = "Go drink a glass of water"
+                elif index == 1:
+                    remind = "Rest your eyes now"
+                    message = "Exercise your eyes or rest them"
+                else:
+                    remind = "Move around"
+                    message = "Go move around"
+                send_notification(remind,message)
+                reminders_sent+=1
             else:
-                remind = "Move around"
-            send_notification(remind)
-            reminders_sent+=1
-        else:
-            sleep(60)
+                sleep(60)
 
 
 
