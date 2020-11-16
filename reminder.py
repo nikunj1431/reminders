@@ -10,8 +10,15 @@ reminders = []#holds the minutes of interval between two reminders. 0th index
 USER_NAME = getpass.getuser()
 times = []#holds the times in mnutes at which the reminders are to be sent.
 
+
 # __________________________________________
 # All the methods start from here
+
+def what_reminder(a):
+    for i in a :
+        if i in times:
+            return a[i]
+
 
 def next_reminder(time_now):
     for i in reminders:
@@ -98,29 +105,23 @@ if added_to_startup() == False:
         add_to_startup("")
 if are_reminders_set() == False:
     set_reminders()
+
 while True:
     if datetime.datetime.now().strftime("%S") == "00":
         next_reminder(int(datetime.datetime.now().strftime("%M")))
-        reminders_sent=0
-        while reminders_sent is not 3:
-            if is_time()==True:
-                #The following is the entire process of sending the reminder
-                index = times.index(int(datetime.datetime.now().strftime("%M")))
-                remind = ""
-                message = ""
-                if index == 0:
-                    remind = "Drink water"
-                    message = "Go drink a glass of water"
-                elif index == 1:
-                    remind = "Rest your eyes now"
-                    message = "Exercise your eyes or rest them"
-                else:
-                    remind = "Move around"
-                    message = "Go move around"
-                send_notification(remind,message)
-                reminders_sent+=1
+        dict_times = {times[0]:"Water",times[1]:"Eyes",times[2]:"Body"}
+        all_reminders_sent = False
+        reminders_sent = 0
+        while all_reminders_sent == False:
+            if reminders_sent == 3:
+                all_reminders_sent = True
+            elif is_time() == True:
+                send_notification(dict_times[datetime.datetime.now().strftime("%M")], "Take a break")
+                times.remove(int(datetime.datetime.now().strftime("%M")))
+                reminders_sent += 1
             else:
                 sleep(60)
+
 
 
 
