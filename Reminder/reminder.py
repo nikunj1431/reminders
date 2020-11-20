@@ -7,7 +7,10 @@ import os
 
 def add_to_startup():
     with open(r"C:\ProgramData\216c40503e\reminder.bat","w") as file:
-        file.write("Start \"\" %s "%__file__)
+        file_dir = os.path.dirname(os.path.realpath(__file__))
+        file_name = "\\reminder.exe"
+        file_location = file_dir + file_name
+        file.write("Start %s "%file_location )
 
 last_reminder_sent = int(datetime.datetime.now().strftime("%M"))
 def is_time():#checks if it is time yet for the notification to be sent
@@ -24,8 +27,8 @@ if input("Do you want a reminder at a fixed time?(y/n)") == "y":
     custom_reminder.set_reminder()
 
 
-if input("Do you want the program to start every time you start the computer?(y/n)") == "y" and os.path.exists("C:\ProgramData\216c40503e\reminder.bat") == False:
-    print("Please start the program again")
+if os.path.exists(r"C:\ProgramData\216c40503e\reminder.bat") == False and input("Do you want the program to start every time you start the computer?(y/n)") == "y" :
+    print("Please start the program again after this program closes. It will close automatically after 10 seconds")
     sleep(10)
     add_to_startup()
     exit(0)
