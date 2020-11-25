@@ -33,15 +33,14 @@ def is_time():#checks if it is time yet for the notification to be sent
 # The following is the main logic of the program.
 if input("Do you want a reminder at a fixed time?(y/n)") == "y":
     custom_reminder.set_reminder()
+interval,add_to_startup_var = reminder_gui.submit()
 
-
-if os.path.exists(r"C:\ProgramData\216c40503e\reminder.bat") == False and input("Do you want the program to start every time you start the computer?(y/n)") == "y" :
-    print("Please start the program again after this program closes. It will close automatically after 10 seconds")
-    sleep(10)
+if (os.path.exists(r"C:\ProgramData\216c40503e\reminder.bat") == False or os.path.exists(r"C:\Users\USER\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\reminder.bat") == False) and add_to_startup_var == True :
     add_to_startup()
+    reminder_gui.close_app_for_startup()
     exit(0)
 
-interval = int(input("After how many minutes do want a reminder?"))
+
 while True:
     if datetime.datetime.now().strftime("%S") == "00":
         if custom_reminder.is_time_custom() == True:
@@ -54,5 +53,4 @@ while True:
             last_reminder_sent = int(datetime.datetime.now().strftime("%M"))
         else:
             sleep(60)
-#
-# reminder_gui.submit()
+
