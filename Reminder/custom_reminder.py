@@ -41,4 +41,4 @@ def send_notification():#sends the notification
     notification.notify(title = title,
                         message = message,
                         timeout = 30,
-                        app_icon = "reminder.ico")
+                        app_icon = "icons\\reminder.ico")
